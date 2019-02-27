@@ -10,8 +10,6 @@ import {
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { ThemeConsumer } from 'react-native-elements'
-
-import Button from '../Button'
 import DigitInputItem from './DigitInputItem'
 
 class DigitInput extends React.Component {
@@ -20,19 +18,16 @@ class DigitInput extends React.Component {
   }
 
   handleOnChangeText = text => {
-    if (text.length <= this.props.howMuch) {
-      this.setState({ digitString: text }, () => {
-        if (text.length === this.props.howMuch) {
-          Keyboard.dismiss()
-        }
+    const digitOnly = text.replace(/[^0-9\.]+/g, '');
+    if (digitOnly.length <= this.props.howMuch) {
+      this.setState({ digitString: digitOnly }, () => {
+        
       })
     }
   }
 
   handleOnBlur = () => {
     console.log('on blur called')
-    // Alert('23232')
-    // Keyboard.dismiss()
   }
 
   render() {
@@ -70,10 +65,6 @@ class DigitInput extends React.Component {
                 <Text style={styles.errorMessage(theme)}>
                   {props.errorMessage}
                 </Text>
-                <Button
-                  disabled={props.howMuch !== state.digitString.length}
-                  title={props.buttonTitle}
-                />
               </View>
             </TouchableWithoutFeedback>
           )
@@ -135,7 +126,6 @@ DigitInput.defaultProps = {
 DigitInput.propTypes = {
   howMuch: PropTypes.number.isRequired,
   label: PropTypes.string.isRequired,
-  buttonTitle: PropTypes.string.isRequired
 }
 
 export default DigitInput

@@ -7,8 +7,8 @@ storiesOf('Input', module)
     <CenterView style={{ backgroundColor: 'grey' }}>{getStory()}</CenterView>
   ))
   .add('Text Input', () => (
-    <React.Fragment>
+    <>
       <Input label="Input Label" />
       <Input label="Input Label" errorMessage="Error Message" />
-    </React.Fragment>
+    </>
   ))
