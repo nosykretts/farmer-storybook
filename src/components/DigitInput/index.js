@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { ThemeConsumer } from 'react-native-elements'
+
 import DigitInputItem from './DigitInputItem'
 
 class DigitInput extends React.Component {
@@ -18,11 +19,9 @@ class DigitInput extends React.Component {
   }
 
   handleOnChangeText = text => {
-    const digitOnly = text.replace(/[^0-9\.]+/g, '');
+    const digitOnly = text.replace(/[^0-9\.]+/g, '')
     if (digitOnly.length <= this.props.howMuch) {
-      this.setState({ digitString: digitOnly }, () => {
-        
-      })
+      this.setState({ digitString: digitOnly }, () => {})
     }
   }
 
@@ -35,12 +34,18 @@ class DigitInput extends React.Component {
     return (
       <ThemeConsumer>
         {({ theme }) => {
-          // console.log(theme)
           return (
             <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-              <View style={styles.root}>
+              <View
+                style={StyleSheet.flatten([
+                  theme.Input.containerStyle,
+                  styles.root
+                ])}
+              >
                 {props.label && (
-                  <Text style={styles.label(theme)}>{props.label}</Text>
+                  <Text style={StyleSheet.flatten([theme.Input.labelStyle])}>
+                    {props.label}
+                  </Text>
                 )}
                 <View style={styles.digitWrapper}>
                   {Array.apply(0, Array(props.howMuch)).map(function(x, i) {
@@ -52,8 +57,21 @@ class DigitInput extends React.Component {
                       />
                     )
                   })}
+                </View>
+                <View
+                  style={StyleSheet.flatten([
+                    theme.Input.inputContainerStyle,
+                    styles.inputContainer(theme)
+                  ])}
+                >
                   <TextInput
-                    style={styles.inputContainer}
+                    returnKeyType='done'
+                    style={StyleSheet.flatten([
+                      theme.Input.inputStyle,
+                      styles.input(theme)
+                    ])}
+                    // underlineColorAndroid
+                    // underlineColorAndroid=""
                     keyboardType="number-pad"
                     selectTextOnFocus={false}
                     value={state.digitString}
@@ -62,9 +80,14 @@ class DigitInput extends React.Component {
                     onBlur={this.handleOnBlur}
                   />
                 </View>
-                <Text style={styles.errorMessage(theme)}>
-                  {props.errorMessage}
-                </Text>
+                {props.errorMessage && (
+                  <Text style={StyleSheet.flatten(
+                    theme.Input.errorStyle,
+                    // props.errorStyle
+                  )}>
+                    {props.errorMessage}
+                  </Text>
+                )}
               </View>
             </TouchableWithoutFeedback>
           )
@@ -76,47 +99,36 @@ class DigitInput extends React.Component {
 
 const styles = StyleSheet.create({
   root: {
-    // backgroundColor: 'pink',
-    flexDirection: 'column',
-    width: '100%',
-    paddingHorizontal: 10
+
   },
   digitWrapper: {
+    width: '100%',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignSelf: 'center'
     // backgroundColor: 'blue'
   },
-  inputContainer: {
-    // backgroundColor: 'red',
+  inputContainer: theme => ({
+    // marginTop: 5,
+    position: 'absolute',
+    borderColor: theme.colors.grey3,
+    borderWidth: 0,
     opacity: 0,
-    // flex: 1,
-    // flexGrow: 1,
     width: '100%',
     height: '100%',
+    alignSelf: 'center',
+    // justifySelf: 'flex-end'
+    // backgroundColor: 'yellow'
+  }),
+  input: theme => ({
+    backgroundColor: 'red',
+    opacity: 0,
+    width: '100%',
+    height: '100%',
+    flex: 1,
+    flexGrow: 1
     // paddingHorizontal: 0,
-    position: 'absolute'
-  },
-  errorMessage: theme => {
-    return {
-      // margin: 5,
-      marginVertical: 5,
-      // fontSize: 12,
-      color: theme.colors.error
-    }
-  },
-  label: theme => ({
-    fontSize: 16,
-    marginBottom: 5,
-    color: theme.colors.grey3,
-    ...Platform.select({
-      android: {
-        // ...fonts.android.bold,
-      },
-      default: {
-        fontWeight: 'bold'
-      }
-    })
-  })
+  }),
 })
 
 DigitInput.defaultProps = {
@@ -125,7 +137,7 @@ DigitInput.defaultProps = {
 
 DigitInput.propTypes = {
   howMuch: PropTypes.number.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired
 }
 
 export default DigitInput

@@ -13,8 +13,8 @@ class DigitInputItem extends React.Component {
           <View
             {...props}
             style={StyleSheet.flatten([
+              styles.root(theme, props.howMuch),
               props.style,
-              styles.root(theme, props.howMuch)
             ])}
           >
             <Text style={StyleSheet.flatten([styles.text(theme)])}>
@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
     borderRadius: inputContainerStyle.borderRadius,
     borderWidth: inputContainerStyle.borderWidth,
     backgroundColor: inputStyle.backgroundColor,
-
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',

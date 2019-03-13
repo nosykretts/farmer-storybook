@@ -1,10 +1,10 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react-native'
 import CenterView from '../components/CenterView'
-import Input from '../components/Input'
+import {Input} from 'react-native-elements'
 storiesOf('Input', module)
   .addDecorator(getStory => (
-    <CenterView style={{ backgroundColor: 'grey' }}>{getStory()}</CenterView>
+    <CenterView style={{ backgroundColor: 'white' }}>{getStory()}</CenterView>
   ))
   .add('Text Input', () => (
     <>
